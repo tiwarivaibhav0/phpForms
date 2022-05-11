@@ -18,45 +18,41 @@
 <?php
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["btn"])) {
-        $num1=$_POST["num1"];
+        if(!empty($_POST["length"]))
+        $length=$_POST["length"];
         
-        $num2=$_POST["num2"];
+        if(!empty($_POST["width"]))
+        $width=$_POST["width"];
         
-        $action=$_POST["btn"];
+        
        
 
-        switch($action){
-            case "+": 
-                $res=$num1+$num2;
-                
-                break;
-            case "*": 
-                $res=$num1*$num2;
-                break;
-            case "-": 
-                $res=$num1-$num2;
-                break;
-            case "/": 
-                $res=$num1/$num2;
-                break;
-            
-                      
-        }  
+        $Area=$length*$width;
+        $peri=$length+$width;  
+
+        
+        
+
 
     }
 
     }
     ?>
      <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
-     Number 1 <input type="number" placeholder="Number1" name="num1" value="<?php echo(isset($num1)?$num1:" ");?>"><br><br>
-     Number 2 <input type="number" placeholder="Number2" name="num2" value="<?php echo(isset($num2)?$num2:" ");?>"><br><br>
-     Result   <input type="text" id="res" value="<?php echo(isset($res)?$res:" ");?>">
+     <table>
+    <tr><td>Length of Rectangle </td><td><input type="number" name="length" value="<?php echo(isset($length)?$length:" ");?>"></td> </tr> 
+    <tr></tr>
+    <tr><td>Width of Rectangle </td><td><input type="number"  name="width" value="<?php echo(isset($width)?$width:" ");?>"></td> </tr>
+    <tr></tr><tr></tr>
+    <tr><td></td><td><button type="submit" name="btn" >Calculate area & Perimeter</button></td></tr>
+     
+     </table>
      <br><br> 
      <div id="btns">
-     <button type="submit" name="btn" value="+">+</button>
-     <button type="submit" name="btn" value="-">-</button>
-     <button type="submit" name="btn" value="*">*</button>
-     <button type="submit" name="btn" value="/">/</button>
+         <p><?php echo(isset($Area)?"Area is $Area sq m":" ");?></p>
+         <p><?php echo(isset($peri)?"Perimeter is $peri sq m":" ");?></p>
+         
+     
      </div>
     </form>
     
