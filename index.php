@@ -1,84 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        #res{
-            margin-left:2.2%;
-        }
-        #btns{
-            margin-left:6.9%
-        }
-        #main{
-            width:40%;
-            margin:auto;
-            
-        }
-        form{
-            margin:auto;
-        }
-        button{
-            
-            width:100%;
-        }
-    </style>
-</head>
-<body>
 <?php
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (isset($_POST["btn"])) {
-        if(!empty($_POST["conversionType"]))
-        $type=$_POST["conversionType"];
-
-        if(!empty($_POST["val"]))
-        $quantity=$_POST["val"];
-        
-        switch($type){
-            case "minute":
-                $res=$quantity*60;
-                $val="$quantity Hour = $res Minutes";
-                break;
-            case "second":
-                $res=$quantity*60*60;
-                $val="$quantity Hour = $res Seconds";
-                break;
-        }
-        
-        
-       
-
-        
-         
-
-        
-        
+$target_dir = "images/";
+$target_file = $target_dir . basename($_FILES["fileUpload"]["name"]);
+$upload = 1;
+$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
 
-    }
+if(isset($_POST["submit"])) {
+  $check = getimagesize($_FILES["fileUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $upload = 1;
+  } else {
+    echo "File is not an image.";
+    $upload = 0;
+  }
+}
 
-    }
-    ?>
-    <div id="main">
-     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
-     <table>
-    <tr><td><td><input type="number" name="val" value="<?php echo(isset($val)?$val:" ");?>"></td> </tr> 
-    <tr></tr>
-     
-    <tr><td></td><td><input type="radio" name="conversionType" value="minute">hours to mins</td></tr>
-    <tr><td></td><td><input type="radio" name="conversionType" value="second">hours to seconds</td></tr>
-     <tr></tr><tr></tr>
-     <tr><td></td><td><?php echo(isset($val)?$val:" ");?></td></tr>
-     <tr></tr>
-    <tr><td></td><td><button type="submit" name="btn" >Convert</button></td></tr>
-     
-     </table>
-     <br><br> 
-     
-    </form>
-    </div>
 
-</body>
-</html>
+if (file_exists($target_file)) {
+  echo " file already exists.";
+  $upload = 0;
+}
+
+
+if ($_FILES["fileUpload"]["size"] > 200000) {
+  echo " your file is too large.";
+  $upload= 0;
+}
+
+
+if($imageFileType != "png") {
+  echo "only PNG  files are allowed.";
+  $upload = 0;
+}
+
+
+if ($upload== 0) {
+  echo " your file was not uploaded.";
+
+} else {
+  if (move_uploaded_file($_FILES["fileUpload"]["tmp_name"], $target_file)) {
+    echo "The file ". htmlspecialchars( basename( $_FILES["fileUpload"]["name"])). " has been uploaded.";
+  } else {
+    echo " there was an error uploading your file.";
+  }
+}
+?>
